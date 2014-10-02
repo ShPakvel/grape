@@ -7,7 +7,8 @@ describe Grape::Validations::AtLeastOneOfValidator do
         def params(arg)
           arg
         end
-        def is_optional?; end
+
+        def required?; end
       end
     end
     let(:at_least_one_of_params) { [:beer, :wine, :grapefruit] }

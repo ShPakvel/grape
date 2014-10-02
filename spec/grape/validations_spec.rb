@@ -985,9 +985,7 @@ describe Grape::Validations do
             'mutually_exclusive works!'
           end
 
-          get '/mutually_exclusive', beer: 'true', wine: 'true',
-                                      nested: { scotch: 'true', aquavit: 'true' },
-                                      nested2: [{ scotch2: 'true'}, { scotch2: 'true', aquavit2: 'true' }]
+          get '/mutually_exclusive', beer: 'true', wine: 'true', nested: { scotch: 'true', aquavit: 'true' }, nested2: [{ scotch2: 'true' }, { scotch2: 'true', aquavit2: 'true' }]
           expect(last_response.status).to eq(400)
           expect(last_response.body).to eq "beer, wine are mutually exclusive, scotch, aquavit are mutually exclusive, scotch2, aquavit2 are mutually exclusive"
         end
