@@ -18,7 +18,11 @@ module Grape
       end
 
       def keys_in_common
-        (attrs.map(&:to_s) & params.stringify_keys.keys).map(&:to_s)
+        (all_keys & params.stringify_keys.keys).map(&:to_s)
+      end
+
+      def all_keys
+        attrs.map(&:to_s)
       end
     end
   end

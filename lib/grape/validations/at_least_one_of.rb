@@ -6,7 +6,7 @@ module Grape
       def validate!(params)
         @params = @scope.params(params)
         if no_exclusive_params_are_present
-          raise Grape::Exceptions::Validation, params: attrs.map(&:to_s), message_key: :at_least_one
+          raise Grape::Exceptions::Validation, params: all_keys, message_key: :at_least_one
         end
         params
       end
@@ -18,7 +18,11 @@ module Grape
       end
 
       def keys_in_common
-        (attrs.map(&:to_s) & params.stringify_keys.keys).map(&:to_s)
+        (all_keys & params.stringify_keys.keys).map(&:to_s)
+      end
+
+      def all_keys
+        attrs.map(&:to_s)
       end
     end
   end

@@ -17,10 +17,6 @@ module Grape
       def none_of_restricted_params_is_present
         keys_in_common.length < 1
       end
-
-      def all_keys
-        attrs.map(&:to_s)
-      end
     end
   end
 end
