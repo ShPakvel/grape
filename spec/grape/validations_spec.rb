@@ -980,7 +980,7 @@ describe Grape::Validations do
             'mutually_exclusive works!'
           end
 
-          get '/mutually_exclusive', beer: 'true', wine: 'true', nested: {scotch: 'true', aquavit: 'true'}
+          get '/mutually_exclusive', beer: 'true', wine: 'true', nested: { scotch: 'true', aquavit: 'true' }
           expect(last_response.status).to eq(400)
           expect(last_response.body).to eq "beer, wine are mutually exclusive, scotch, aquavit are mutually exclusive"
         end
@@ -1042,13 +1042,13 @@ describe Grape::Validations do
         end
 
         it 'succeeds when one is present' do
-          get '/exactly_one_of_nested', nested: {beer_nested: 'string'}
+          get '/exactly_one_of_nested', nested: { beer_nested: 'string' }
           expect(last_response.status).to eq(200)
           expect(last_response.body).to eq 'exactly_one_of works!'
         end
 
         it 'errors when two or more are present' do
-          get '/exactly_one_of_nested', nested: {beer_nested: 'string', wine_nested: 'anotherstring'}
+          get '/exactly_one_of_nested', nested: { beer_nested: 'string', wine_nested: 'anotherstring' }
           expect(last_response.status).to eq(400)
           expect(last_response.body).to eq "beer_nested, wine_nested are mutually exclusive"
         end
@@ -1110,13 +1110,13 @@ describe Grape::Validations do
         end
 
         it 'does not error when one is present' do
-          get '/at_least_one_of_nested', nested: {beer_nested: 'string'}
+          get '/at_least_one_of_nested', nested: { beer_nested: 'string' }
           expect(last_response.status).to eq(200)
           expect(last_response.body).to eq 'at_least_one_of works!'
         end
 
         it 'does not error when two are present' do
-          get '/at_least_one_of_nested', nested: {beer_nested: 'string', wine_nested: 'string'}
+          get '/at_least_one_of_nested', nested: { beer_nested: 'string', wine_nested: 'string' }
           expect(last_response.status).to eq(200)
           expect(last_response.body).to eq 'at_least_one_of works!'
         end
