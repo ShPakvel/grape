@@ -1030,11 +1030,17 @@ describe Grape::Validations do
       context 'nested params' do
         before :each do
           subject.params do
-            optional :nested, type: Hash do
+            requires :nested, type: Hash do
               optional :beer_nested
               optional :wine_nested
               optional :juice_nested
               exactly_one_of :beer_nested, :wine_nested, :juice_nested
+            end
+            optional :nested2, type: Array do
+              optional :beer_nested2
+              optional :wine_nested2
+              optional :juice_nested2
+              exactly_one_of :beer_nested2, :wine_nested2, :juice_nested2
             end
           end
           subject.get '/exactly_one_of_nested' do
@@ -1045,7 +1051,7 @@ describe Grape::Validations do
         it 'errors when none are present' do
           get '/exactly_one_of_nested'
           expect(last_response.status).to eq(400)
-          expect(last_response.body).to eq "beer_nested, wine_nested, juice_nested are missing, exactly one parameter must be provided"
+          expect(last_response.body).to eq "nested is missing, beer_nested, wine_nested, juice_nested are missing, exactly one parameter must be provided"
         end
 
         it 'succeeds when one is present' do
@@ -1055,9 +1061,9 @@ describe Grape::Validations do
         end
 
         it 'errors when two or more are present' do
-          get '/exactly_one_of_nested', nested: { beer_nested: 'string', wine_nested: 'anotherstring' }
+          get '/exactly_one_of_nested', nested: { beer_nested: 'string' }, nested2: [{ beer_nested2: 'string', wine_nested2: 'anotherstring' }]
           expect(last_response.status).to eq(400)
-          expect(last_response.body).to eq "beer_nested, wine_nested are mutually exclusive"
+          expect(last_response.body).to eq "beer_nested2, wine_nested2 are mutually exclusive"
         end
       end
     end
@@ -1098,11 +1104,17 @@ describe Grape::Validations do
       context 'nested params' do
         before :each do
           subject.params do
-            optional :nested, type: Hash do
+            requires :nested, type: Hash do
               optional :beer_nested
               optional :wine_nested
               optional :juice_nested
               at_least_one_of :beer_nested, :wine_nested, :juice_nested
+            end
+            optional :nested2, type: Array do
+              optional :beer_nested2
+              optional :wine_nested2
+              optional :juice_nested2
+              at_least_one_of :beer_nested2, :wine_nested2, :juice_nested2
             end
           end
           subject.get '/at_least_one_of_nested' do
@@ -1113,17 +1125,17 @@ describe Grape::Validations do
         it 'errors when none are present' do
           get '/at_least_one_of_nested'
           expect(last_response.status).to eq(400)
-          expect(last_response.body).to eq "beer_nested, wine_nested, juice_nested are missing, at least one parameter must be provided"
+          expect(last_response.body).to eq "nested is missing, beer_nested, wine_nested, juice_nested are missing, at least one parameter must be provided"
         end
 
         it 'does not error when one is present' do
-          get '/at_least_one_of_nested', nested: { beer_nested: 'string' }
+          get '/at_least_one_of_nested', nested: { beer_nested: 'string' }, nested2: [{ beer_nested2: 'string' }]
           expect(last_response.status).to eq(200)
           expect(last_response.body).to eq 'at_least_one_of works!'
         end
 
         it 'does not error when two are present' do
-          get '/at_least_one_of_nested', nested: { beer_nested: 'string', wine_nested: 'string' }
+          get '/at_least_one_of_nested', nested: { beer_nested: 'string', wine_nested: 'string' }, nested2: [{ beer_nested2: 'string', wine_nested2: 'string' }]
           expect(last_response.status).to eq(200)
           expect(last_response.body).to eq 'at_least_one_of works!'
         end

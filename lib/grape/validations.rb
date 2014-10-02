@@ -110,6 +110,10 @@ module Grape
         !@parent
       end
 
+      def required?
+        !@optional
+      end
+
       protected
 
       def push_declared_params(attrs)

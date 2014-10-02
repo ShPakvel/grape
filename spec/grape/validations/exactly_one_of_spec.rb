@@ -7,6 +7,7 @@ describe Grape::Validations::ExactlyOneOfValidator do
         def params(arg)
           arg
         end
+        def is_optional?; end
       end
     end
     let(:exactly_one_of_params) { [:beer, :wine, :grapefruit] }

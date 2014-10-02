@@ -2,11 +2,9 @@ module Grape
   module Validations
     require 'grape/validations/mutual_exclusion'
     class ExactlyOneOfValidator < MutualExclusionValidator
-      attr_reader :params
-
       def validate!(params)
         super
-        if none_of_restricted_params_is_present
+        if scope_requires_params && none_of_restricted_params_is_present
           raise Grape::Exceptions::Validation, params: all_keys, message_key: :exactly_one
         end
         params
@@ -14,8 +12,16 @@ module Grape
 
       private
 
+      def scope_requires_params
+        return true unless @scope.is_optional?
+        scoped_params.each do |resource_params|
+          return true unless resource_params.length == 0
+        end
+        false
+      end
+
       def none_of_restricted_params_is_present
-        params.each do |resource_params|
+        scoped_params.each do |resource_params|
           return true if keys_in_common(resource_params).length < 1
         end
         false
