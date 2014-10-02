@@ -15,7 +15,10 @@ module Grape
       private
 
       def none_of_restricted_params_is_present
-        keys_in_common.length < 1
+        params.each do |resource_params|
+          return true if keys_in_common(resource_params).length < 1
+        end
+        false
       end
     end
   end

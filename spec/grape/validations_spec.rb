@@ -975,14 +975,21 @@ describe Grape::Validations do
               optional :aquavit
               mutually_exclusive :scotch, :aquavit
             end
+            optional :nested2, type: Array do
+              optional :scotch2
+              optional :aquavit2
+              mutually_exclusive :scotch2, :aquavit2
+            end
           end
           subject.get '/mutually_exclusive' do
             'mutually_exclusive works!'
           end
 
-          get '/mutually_exclusive', beer: 'true', wine: 'true', nested: { scotch: 'true', aquavit: 'true' }
+          get '/mutually_exclusive', beer: 'true', wine: 'true',
+                                      nested: { scotch: 'true', aquavit: 'true' },
+                                      nested2: [{ scotch2: 'true'}, { scotch2: 'true', aquavit2: 'true' }]
           expect(last_response.status).to eq(400)
-          expect(last_response.body).to eq "beer, wine are mutually exclusive, scotch, aquavit are mutually exclusive"
+          expect(last_response.body).to eq "beer, wine are mutually exclusive, scotch, aquavit are mutually exclusive, scotch2, aquavit2 are mutually exclusive"
         end
       end
     end
