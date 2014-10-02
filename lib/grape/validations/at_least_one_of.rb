@@ -4,7 +4,7 @@ module Grape
       attr_reader :params
 
       def validate!(params)
-        @params = params
+        @params = @scope.params(params)
         if no_exclusive_params_are_present
           raise Grape::Exceptions::Validation, params: attrs.map(&:to_s), message_key: :at_least_one
         end

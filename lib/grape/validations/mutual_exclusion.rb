@@ -4,7 +4,7 @@ module Grape
       attr_reader :params
 
       def validate!(params)
-        @params = params
+        @params = @scope.params(params)
         if two_or_more_exclusive_params_are_present
           raise Grape::Exceptions::Validation, params: keys_in_common, message_key: :mutual_exclusion
         end
